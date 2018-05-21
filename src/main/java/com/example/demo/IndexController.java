@@ -21,7 +21,7 @@ public class IndexController {
     @GetMapping("/")
     public ModelAndView index() {
         Map<String, String> model = new HashMap<>();
-        model.put("name", "Alexey");
+        model.put("name", "Danil");
 
         Visit visit = new Visit();
         visit.description = String.format("Visited at %s", LocalDateTime.now());
