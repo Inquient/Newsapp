@@ -6,12 +6,22 @@
 </head>
 <body>
 
-<form action="/addTitle" method="POST">
-    <label>Title</label>
-    <input type="text" name="title">
-    <label>Text</label>
-    <input type="text" name="text">
-    <input type="submit" value="Add new order">
+<form action="/news" method="POST">
+    <div>
+        <label>
+            <span>Заголовок новости</span><br>
+            <textarea name="title" cols="40" rows="1"></textarea>
+        </label><br>
+    </div>
+    <div>
+        <label>
+            <span>Текст новости</span><br>
+            <textarea name="text" cols="40" rows="5"></textarea>
+        </label><br>
+    </div>
+    <div>
+        <input type="submit" value="Add new order">
+    </div>
 </form>
 
 </body>

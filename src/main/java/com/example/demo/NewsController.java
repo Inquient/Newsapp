@@ -8,9 +8,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.*;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+
 
 @Controller
 public class NewsController {
@@ -24,19 +26,6 @@ public class NewsController {
     @GetMapping("/news")
     public ModelAndView news(){
         Map<String, String> model = new HashMap<>();
-
-//        model.put("title", "Британские парламентарии призвали ужесточить санкции против России");
-//        model.put("publishDate", String.valueOf(LocalDateTime.now()));
-//        model.put("text", "Комитет по международным делам Палаты общин британского парламента подготовил");
-//        model.put("keywords", "политика, санкции, Путин, Великобритания");
-
-//        News news = new News();
-//        news.title = "Британские парламентарии призвали ужесточить санкции против России";
-//        news.publishDate = LocalDateTime.now();
-//        news.text = "Комитет по международным делам Палаты общин британского парламента подготовил";
-//        news.keywords = "политика, санкции, Путин, Великобритания";
-//        newsRepository.save(news);
-
         return new ModelAndView("news", model);
     }
 
@@ -45,13 +34,19 @@ public class NewsController {
         return new ModelAndView("addNews");
     }
 
-    @RequestMapping(value = "/addTitle", method = RequestMethod.POST)
-    public ModelAndView addNewTitle(@RequestParam(value="title") String title, @RequestParam(value="text") String text){
+    @RequestMapping(value = "/news", method = RequestMethod.POST)
+    public ModelAndView addNewTitle(@RequestParam(value="title") String title, @RequestParam(value="text") String text) throws IOException {
         News news = new News();
         news.title = title;
         news.publishDate = LocalDateTime.now();
         news.text = text;
-        news.keywords = "много слов";
+
+        String python = "C:/ProgramData/Anaconda3/python.exe";
+        String script = new File("src/main/python/LSA.py").getAbsolutePath();
+//        Process p = new ProcessBuilder(python, script, "-t", text).start();
+//        BufferedReader lineReader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+//        news.keywords = lineReader.readLine();
+        news.keywords = script;
         newsRepository.save(news);
 
         return new ModelAndView("news");

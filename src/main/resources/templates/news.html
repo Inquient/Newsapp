@@ -7,7 +7,7 @@
         .then(response => response.json())
         .then(news => {
             news.forEach(item => {
-                const el = document.createElement('li');
+                const el = document.createElement('tr');
                 el.innerText = item.title;
 
                 document.querySelector('#news').append(el);
@@ -20,8 +20,8 @@
     <title>Новости</title>
 </head>
 <body>
-    <ul id="news">
-    </ul>
+    <table id="news">
+    </table>
 
     <a href="/addNews">Добавить Новости</a>
 
