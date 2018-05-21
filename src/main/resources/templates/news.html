@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<script type="text/javascript">
+    fetch("/api/news")
+        .then(response => response.json())
+        .then(news => {
+            news.forEach(item => {
+                const el = document.createElement('li');
+                el.innerText = item.title;
+
+                document.querySelector('#news').append(el);
+            });
+        });
+</script>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Новости</title>
+</head>
+<body>
+    <ul id="news">
+    </ul>
+</body>
+</html>
