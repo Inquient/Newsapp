@@ -20,7 +20,10 @@
         </label><br>
     </div>
     <div>
-        <input type="submit" value="Add new order">
+        <form method="post" action="news">
+            <input type="submit" value="Add new order">
+            <input type="hidden" name="_csrf" value="{{_csrf.token}}">
+        </form>
     </div>
 </form>
 

@@ -2,29 +2,25 @@
 
 <html lang="en">
 
-<!--<script type="text/javascript">-->
-    <!--fetch("/api/news")-->
-        <!--.then(response => response.json())-->
-        <!--.then(news => {-->
-            <!--news.forEach(item => {-->
-                <!--const el = document.createElement('tr');-->
-                <!--el.innerText = item.title;-->
-
-                <!--document.querySelector('#news').append(el);-->
-            <!--});-->
-        <!--});-->
-<!--</script>-->
-
 <head>
     <meta charset="UTF-8">
     <title>Новости</title>
 </head>
 <body>
-    <div>Список новостей</div>
+    <div>
+        <form action="/logout" method="post">
+            <input type="hidden" name="_csrf" value="{{_csrf.token}}">
+            <input type="submit" value="Sign Out"/>
+        </form>
+    </div>
+
     <form method="post" action="filter">
         <input type="text" name="filter">
+        <input type="hidden" name="_csrf" value="{{_csrf.token}}">
         <button type="submit">Найти</button>
     </form>
+
+    <div>Список новостей</div>
     {{#news}}
     <div>
         <b>{{title}}</b>
@@ -33,8 +29,6 @@
         <i>{{keywords}}</i>
     </div>
     {{/news}}
-    <!--<table id="news">-->
-    <!--</table>-->
 
     <a href="/addNews">Добавить Новости</a>
 
