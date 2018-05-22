@@ -2,10 +2,8 @@ package com.example.demo;
 
 import com.example.demo.Models.News;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.*;
@@ -21,6 +19,14 @@ public class NewsController {
 
     public NewsController(NewsRepository newsRepository) {
         this.newsRepository = newsRepository;
+    }
+
+    @RequestMapping(value = "/news/{title}")
+    public ModelAndView getTitle(
+            @RequestParam(name="title", required = false) String title, Map <String, Object> model
+    ){
+        model.put("title", title);
+        return new ModelAndView("title", model);
     }
 
     @GetMapping("/news")
