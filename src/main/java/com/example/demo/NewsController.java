@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import com.example.demo.Models.News;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -9,13 +10,15 @@ import org.springframework.web.servlet.ModelAndView;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
 @Controller
 public class NewsController {
 
-    private final NewsRepository newsRepository;
+    @Autowired
+    private NewsRepository newsRepository;
 
     public NewsController(NewsRepository newsRepository) {
         this.newsRepository = newsRepository;
@@ -30,8 +33,9 @@ public class NewsController {
     }
 
     @GetMapping("/news")
-    public ModelAndView news(){
-        Map<String, String> model = new HashMap<>();
+    public ModelAndView news(Map<String, Object> model){
+        Iterable<News> allNews = newsRepository.findAll();
+        model.put("news", allNews);
         return new ModelAndView("news", model);
     }
 
@@ -41,20 +45,32 @@ public class NewsController {
     }
 
     @RequestMapping(value = "/news", method = RequestMethod.POST)
-    public ModelAndView addNewTitle(@RequestParam(value="title") String title, @RequestParam(value="text") String text) throws IOException {
+    public ModelAndView addNewTitle(@RequestParam(value="title") String title,
+                                    @RequestParam(value="text") String text,
+                                    Map<String, Object> model) throws IOException {
         News news = new News();
-        news.title = title;
-        news.publishDate = LocalDateTime.now();
-        news.text = text;
+        news.setTitle(title);
+        news.setPublishDate(LocalDateTime.now());
+        news.setText(text);
 
         String python = "C:/ProgramData/Anaconda3/python.exe";
         String script = new File("src/main/python/LSA.py").getAbsolutePath();
 //        Process p = new ProcessBuilder(python, script, "-t", text).start();
 //        BufferedReader lineReader = new BufferedReader(new InputStreamReader(p.getInputStream()));
 //        news.keywords = lineReader.readLine();
-        news.keywords = script;
+        news.setKeywords(script);
         newsRepository.save(news);
 
-        return new ModelAndView("news");
+        Iterable<News> allNews = newsRepository.findAll();
+        model.put("news", allNews);
+
+        return new ModelAndView("news", model);
+    }
+
+    @PostMapping("filter")
+    public String filter(@RequestParam String filter, Map<String, Object> model){
+        List<News> news = newsRepository.findByTitle(filter);
+        model.put("news", news);
+        return "news";
     }
 }

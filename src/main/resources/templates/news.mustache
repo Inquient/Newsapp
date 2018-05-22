@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<!--<script type="text/javascript">-->
+    <!--fetch("/api/news")-->
+        <!--.then(response => response.json())-->
+        <!--.then(news => {-->
+            <!--news.forEach(item => {-->
+                <!--const el = document.createElement('tr');-->
+                <!--el.innerText = item.title;-->
+
+                <!--document.querySelector('#news').append(el);-->
+            <!--});-->
+        <!--});-->
+<!--</script>-->
+
+<head>
+    <meta charset="UTF-8">
+    <title>Новости</title>
+</head>
+<body>
+    <div>Список новостей</div>
+    <form method="post" action="filter">
+        <input type="text" name="filter">
+        <button type="submit">Найти</button>
+    </form>
+    {{#news}}
+    <div>
+        <b>{{title}}</b>
+        <span>{{text}}</span>
+        <b>{{publishDate}}</b>
+        <i>{{keywords}}</i>
+    </div>
+    {{/news}}
+    <!--<table id="news">-->
+    <!--</table>-->
+
+    <a href="/addNews">Добавить Новости</a>
+
+</body>
+</html>
