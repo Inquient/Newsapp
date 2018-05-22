@@ -1,5 +1,7 @@
 package com.example.demo;
 
+//aBlalbla
+
 import com.example.demo.Models.Visit;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +23,7 @@ public class IndexController {
     @GetMapping("/")
     public ModelAndView index() {
         Map<String, String> model = new HashMap<>();
-        model.put("name", "Danil");
+        model.put("name", "Danil and Ilya");
 
         Visit visit = new Visit();
         visit.description = String.format("Visited at %s", LocalDateTime.now());
