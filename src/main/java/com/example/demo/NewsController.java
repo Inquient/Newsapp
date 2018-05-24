@@ -2,7 +2,6 @@ package com.example.demo;
 
 import com.example.demo.Models.News;
 import com.example.demo.Models.User;
-import com.example.demo.NewsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -10,10 +9,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -36,10 +34,19 @@ public class NewsController {
     }
 
     @GetMapping("/news")
-    public ModelAndView news(Map<String, Object> model){
-        Iterable<News> allNews = newsRepository.findAll();
-        model.put("news", allNews);
-        return new ModelAndView("news", model);
+    public String news(@RequestParam(required = false, defaultValue = "") String filter,  Model model){
+        Iterable<News> news = newsRepository.findAll();
+
+        if (filter != null && !filter.isEmpty()) {
+            news = newsRepository.findByTitle(filter);
+        } else {
+            news = newsRepository.findAll();
+        }
+
+        model.addAttribute("news", news);
+        model.addAttribute("filter", filter);
+
+        return "news";
     }
 
     @RequestMapping(value = "/addNews", method = RequestMethod.GET)
@@ -73,16 +80,16 @@ public class NewsController {
         return new ModelAndView("news", model);
     }
 
-    @PostMapping("/filter")
-    public String filter(@RequestParam String filter, Map<String, Object> model){
-        Iterable<News> news = newsRepository.findByTitle(filter);
-
-        if (filter != null && !filter.isEmpty()) {
-            news = newsRepository.findByTitle(filter);
-        } else {
-            news = newsRepository.findAll();
-        }
-        model.put("news", news);
-        return "news";
-    }
+//    @PostMapping("/filter")
+//    public String filter(@RequestParam String filter, Map<String, Object> model){
+//        Iterable<News> news = newsRepository.findByTitle(filter);
+//
+//        if (filter != null && !filter.isEmpty()) {
+//            news = newsRepository.findByTitle(filter);
+//        } else {
+//            news = newsRepository.findAll();
+//        }
+//        model.put("news", news);
+//        return "news";
+//    }
 }

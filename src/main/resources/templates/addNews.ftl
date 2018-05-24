@@ -1,11 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>AddNews</title>
-</head>
-<body>
+<#import "parts/common.ftl" as c>
 
+<@c.page>
 <form action="/news" method="POST">
     <div>
         <label>
@@ -22,10 +17,8 @@
     <div>
         <form method="post" action="news">
             <input type="submit" value="Add new order">
-            <input type="hidden" name="_csrf" value="{{_csrf.token}}">
+            <input type="hidden" name="_csrf" value="${_csrf.token}">
         </form>
     </div>
 </form>
-
-</body>
-</html>
+</@c.page>
