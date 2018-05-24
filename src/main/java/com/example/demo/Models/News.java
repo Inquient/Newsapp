@@ -1,9 +1,6 @@
 package com.example.demo.Models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
@@ -21,14 +18,31 @@ public class News {
     private String text;
     private String keywords;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User author;
+
     public News() {
     }
 
-    public News(String title, LocalDateTime publishDate, String text, String keywords) {
+    public News(String title, LocalDateTime publishDate, String text, String keywords, User user) {
         this.title = title;
         this.publishDate = publishDate;
         this.text = text;
         this.keywords = keywords;
+        this.author = user;
+    }
+
+    public String getAuthorName(){
+        return author != null ? author.getUsername() : "<none>";
+    }
+
+    public User getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(User author) {
+        this.author = author;
     }
 
     public Long getId() {

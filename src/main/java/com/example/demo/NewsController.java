@@ -1,7 +1,9 @@
 package com.example.demo;
 
 import com.example.demo.Models.News;
+import com.example.demo.Models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -45,9 +47,11 @@ public class NewsController {
     }
 
     @RequestMapping(value = "/news", method = RequestMethod.POST)
-    public ModelAndView addNewTitle(@RequestParam(value="title") String title,
-                                    @RequestParam(value="text") String text,
-                                    Map<String, Object> model) throws IOException {
+    public ModelAndView addNewTitle(
+            @AuthenticationPrincipal User user,
+            @RequestParam(value="title") String title,
+            @RequestParam(value="text") String text,
+            Map<String, Object> model) throws IOException {
         News news = new News();
         news.setTitle(title);
         news.setPublishDate(LocalDateTime.now());
@@ -59,6 +63,7 @@ public class NewsController {
 //        BufferedReader lineReader = new BufferedReader(new InputStreamReader(p.getInputStream()));
 //        news.keywords = lineReader.readLine();
         news.setKeywords(script);
+        news.setAuthor(user);
         newsRepository.save(news);
 
         Iterable<News> allNews = newsRepository.findAll();
