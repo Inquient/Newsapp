@@ -2,6 +2,7 @@ package com.example.demo;
 
 import com.example.demo.Models.News;
 import com.example.demo.Models.User;
+import com.example.demo.NewsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -72,9 +73,15 @@ public class NewsController {
         return new ModelAndView("news", model);
     }
 
-    @PostMapping("filter")
+    @PostMapping("/filter")
     public String filter(@RequestParam String filter, Map<String, Object> model){
-        List<News> news = newsRepository.findByTitle(filter);
+        Iterable<News> news = newsRepository.findByTitle(filter);
+
+        if (filter != null && !filter.isEmpty()) {
+            news = newsRepository.findByTitle(filter);
+        } else {
+            news = newsRepository.findAll();
+        }
         model.put("news", news);
         return "news";
     }

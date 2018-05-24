@@ -2,6 +2,8 @@ package com.example.demo;
 
 import com.example.demo.Models.News;
 import com.example.demo.Models.Visit;
+import com.example.demo.NewsRepository;
+import com.example.demo.VisitsRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
