@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.*;
@@ -29,12 +26,10 @@ public class NewsController {
         this.newsRepository = newsRepository;
     }
 
-    @RequestMapping(value = "/news/{title}")
-    public ModelAndView getTitle(
-            @RequestParam(name="title", required = false) String title, Map <String, Object> model
-    ){
-        model.put("title", title);
-        return new ModelAndView("title", model);
+    @PostMapping("/news/{news}")
+    public String removeNews(@RequestParam(name="newsId") News news){
+        newsRepository.delete(news);
+        return "redirect:/news";
     }
 
     @GetMapping("/news")
@@ -42,7 +37,7 @@ public class NewsController {
         Iterable<News> news = newsRepository.findAll();
 
         if (filter != null && !filter.isEmpty()) {
-            news = newsRepository.findByTitle(filter);
+            news = newsRepository.findByKeywords(filter);
         } else {
             news = newsRepository.findAll();
         }
@@ -71,24 +66,11 @@ public class NewsController {
 
         String python = "C:/ProgramData/Anaconda3/python.exe";
         String script = new File("src/main/python/LSA.py").getAbsolutePath();
-//        Process p = new ProcessBuilder(python, script, "-t", text).start();
-//
-//        String fileName = "C:/Users/inquient/Downloads/spring-demo-master/spring-demo-master/src/main/python/category.txt";
-//        news.setKeywords(new String(Files.readAllBytes(Paths.get(fileName))));
 
-        // указываем в конструкторе ProcessBuilder,
-        // что нужно запустить программу ls с параметрами -l /dev
         ProcessBuilder procBuilder = new ProcessBuilder(python, script,"-t", text);
-
-        // перенаправляем стандартный поток ошибок на
-        // стандартный вывод
         procBuilder.redirectErrorStream(true);
-
-        // запуск программы
         Process process = procBuilder.start();
 
-        // читаем стандартный поток вывода
-        // и выводим на экран
         InputStream stdout = process.getInputStream();
         InputStreamReader isrStdout = new InputStreamReader(stdout);
         BufferedReader brStdout = new BufferedReader(isrStdout);
@@ -98,10 +80,6 @@ public class NewsController {
             System.out.println(line);
             news.setKeywords(line);
         }
-
-        // ждем пока завершится вызванная программа
-        // и сохраняем код, с которым она завершилась в
-        // в переменную exitVal
         int exitVal = process.waitFor();
 
         news.setAuthor(user);
@@ -113,16 +91,4 @@ public class NewsController {
         return new ModelAndView("news", model);
     }
 
-//    @PostMapping("/filter")
-//    public String filter(@RequestParam String filter, Map<String, Object> model){
-//        Iterable<News> news = newsRepository.findByTitle(filter);
-//
-//        if (filter != null && !filter.isEmpty()) {
-//            news = newsRepository.findByTitle(filter);
-//        } else {
-//            news = newsRepository.findAll();
-//        }
-//        model.put("news", news);
-//        return "news";
-//    }
 }

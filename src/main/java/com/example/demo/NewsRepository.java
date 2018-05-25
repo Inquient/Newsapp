@@ -9,4 +9,6 @@ interface NewsRepository extends CrudRepository<News, Long>{
 
     List<News> findByTitle(String title);
 
+    List<News> findByKeywords(String keywords);
+
 }

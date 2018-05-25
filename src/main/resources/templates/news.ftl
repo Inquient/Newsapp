@@ -24,7 +24,6 @@
             <tr class="active">
                 <th scope="col">Заголовок</th>
                 <th scope="col">Текст</th>
-                <th scope="col">Дата публикации</th>
                 <th scope="col">Категория</th>
                 <th scope="col">Автор</th>
             </tr>
@@ -34,19 +33,19 @@
             <tr>
                 <th scope="row"><b>${n.title}</b></th>
                 <td><span>${n.text}</span></td>
-                <td><b>${n.publishDate}</b></td>
                 <td><i>${n.keywords?ifExists}</i></td>
                 <td><strong>${n.authorName}</strong></td>
+                <td><form class="form-horizontal" role="form" action="/news/${n.id}" method="post">
+                    <input type="hidden" value="${n.id}" name="newsId">
+                    <input type="hidden" value="${_csrf.token}" name="_csrf">
+                    <button class="btn btn-default btn-lg btn-block" name="delete" type="submit">Удалить</button>
+                </form>
+                </td>
             </tr>
             </tbody>
     <#else>
     Нет Новостей
     </#list>
-        <#--<b>${n.title}</b>-->
-        <#--<span>${n.text}</span>-->
-        <#--<b>${n.publishDate}</b>-->
-        <#--<i>${n.keywords}</i>-->
-        <#--<strong>${n.authorName}</strong>-->
         </table>
     </div>
 
