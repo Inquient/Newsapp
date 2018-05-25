@@ -18,6 +18,12 @@
             <td>${user.username}</td>
             <td><#list user.roles as role>${role}<#sep>, </#list></td>
             <td><a href="/user/${user.id}">Редактировать</a></td>
+            <td><form class="form-horizontal" role="form" action="/user/${user.id}" method="post">
+                <input type="hidden" value="${user.id}" name="userId">
+                <input type="hidden" value="${_csrf.token}" name="_csrf">
+                <button class="btn btn-default btn-lg btn-block" name="delete" type="submit">Удалить</button>
+            </form>
+            </td>
         </tr>
         </#list>
     </tbody>

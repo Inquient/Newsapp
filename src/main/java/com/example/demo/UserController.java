@@ -34,6 +34,12 @@ public class UserController {
         return "userEdit";
     }
 
+    @PostMapping("{user}")
+    public String removeUser(@RequestParam("userId") User user){
+        userRepository.delete(user);
+        return "redirect:/user";
+    }
+
     @PostMapping
     public String userSave(
             @RequestParam String username,
@@ -55,4 +61,11 @@ public class UserController {
         userRepository.save(user);
         return "redirect:/user";
     }
+
+//    @GetMapping
+//    public String userDelete(
+//            @RequestParam("userId") User user){
+//        userRepository.delete(user);
+//        return "redirect:/user";
+//    }
 }
