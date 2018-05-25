@@ -3,6 +3,7 @@
 <@c.page>
     <div>
         <@l.logout />
+        <span><a href="/user">Список пользователей</a> </span>
     </div>
 
     <form method="get" action="/news">
