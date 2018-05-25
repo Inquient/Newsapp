@@ -61,11 +61,4 @@ public class UserController {
         userRepository.save(user);
         return "redirect:/user";
     }
-
-//    @GetMapping
-//    public String userDelete(
-//            @RequestParam("userId") User user){
-//        userRepository.delete(user);
-//        return "redirect:/user";
-//    }
 }
