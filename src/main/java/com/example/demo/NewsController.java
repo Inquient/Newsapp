@@ -6,11 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Map;
 
@@ -59,7 +63,7 @@ public class NewsController {
             @AuthenticationPrincipal User user,
             @RequestParam(value="title") String title,
             @RequestParam(value="text") String text,
-            Map<String, Object> model) throws IOException {
+            Map<String, Object> model) throws IOException, InterruptedException {
         News news = new News();
         news.setTitle(title);
         news.setPublishDate(LocalDateTime.now());
@@ -68,9 +72,38 @@ public class NewsController {
         String python = "C:/ProgramData/Anaconda3/python.exe";
         String script = new File("src/main/python/LSA.py").getAbsolutePath();
 //        Process p = new ProcessBuilder(python, script, "-t", text).start();
-//        BufferedReader lineReader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-//        news.keywords = lineReader.readLine();
-        news.setKeywords(script);
+//
+//        String fileName = "C:/Users/inquient/Downloads/spring-demo-master/spring-demo-master/src/main/python/category.txt";
+//        news.setKeywords(new String(Files.readAllBytes(Paths.get(fileName))));
+
+        // указываем в конструкторе ProcessBuilder,
+        // что нужно запустить программу ls с параметрами -l /dev
+        ProcessBuilder procBuilder = new ProcessBuilder(python, script,"-t", text);
+
+        // перенаправляем стандартный поток ошибок на
+        // стандартный вывод
+        procBuilder.redirectErrorStream(true);
+
+        // запуск программы
+        Process process = procBuilder.start();
+
+        // читаем стандартный поток вывода
+        // и выводим на экран
+        InputStream stdout = process.getInputStream();
+        InputStreamReader isrStdout = new InputStreamReader(stdout);
+        BufferedReader brStdout = new BufferedReader(isrStdout);
+
+        String line = null;
+        while((line = brStdout.readLine()) != null) {
+            System.out.println(line);
+            news.setKeywords(line);
+        }
+
+        // ждем пока завершится вызванная программа
+        // и сохраняем код, с которым она завершилась в
+        // в переменную exitVal
+        int exitVal = process.waitFor();
+
         news.setAuthor(user);
         newsRepository.save(news);
 

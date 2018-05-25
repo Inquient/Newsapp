@@ -7,7 +7,7 @@
             <div class="col-md-6"><@l.logout /></div>
             <div class="col-md-6"> <span><a href="/user">Список пользователей</a> </span>
                 <form method="get" action="/news">
-                    <input type="text" name="filter" value="${filter}">
+                    <input type="text" name="filter" value="${filter?ifExists}">
                     <button type="submit">Найти</button>
                 </form>
             </div>
@@ -35,7 +35,7 @@
                 <th scope="row"><b>${n.title}</b></th>
                 <td><span>${n.text}</span></td>
                 <td><b>${n.publishDate}</b></td>
-                <td><i>${n.keywords}</i></td>
+                <td><i>${n.keywords?ifExists}</i></td>
                 <td><strong>${n.authorName}</strong></td>
             </tr>
             </tbody>

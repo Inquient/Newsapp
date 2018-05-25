@@ -8,7 +8,7 @@ class textProcessor:
 
     # Инициализация.
     def __init__(self):
-        with open(u'stopwords.txt', "r", -1, "utf-8") as f:
+        with open(u'C:/Users/inquient/Downloads/spring-demo-master/spring-demo-master/src/main/python/stopwords.txt', "r", -1, "utf-8") as f:
             for line in f.readlines():
                 self.stopwordsList.append(line.strip())     # Генерируем список стоп-слов
 
